@@ -46,7 +46,7 @@ window.SITE = {
       id: "gmod", eng: "Garry's Mod", name: "Garry's Mod", acc: "cyan", art: "gmod", image: "assets/hero.jpg",
       tagline: "Городской roleplay",
       modes: [
-        { id: "minicity", name: "Mini City RP", sub: "Городской roleplay", status: "live", url: "minicity.html",
+        { id: "minicity", name: "Mini City RP", sub: "Городской roleplay", status: "live", url: "minicity",
           text: "Живой город, 34 профессии, своя экономика, мэрия, полиция и мафия. Твоя история начинается здесь." },
         { id: "scprp", name: "SCP RP", sub: "Новый режим", status: "dev", url: "",
           text: "Второй режим Nova Scar на Garry's Mod. Сейчас в разработке — подробности появятся в новостях." },

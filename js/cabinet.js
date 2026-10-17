@@ -173,7 +173,7 @@
     return '<div class="cgrid">' +
       '<div class="ccard gold"><h3>Баланс</h3><div class="big-num">' + NS.usd(d.balance) + "</div>" +
       '<div class="sub-line">1 $ = ' + String(D.rate || 10000).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " игровых денег</div>" +
-      '<p style="margin:16px 0 0;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-gold btn-sm" type="button" id="topup">Пополнить</button><a class="btn btn-line" href="donate.html">Цены и статусы</a></p></div>' +
+      '<p style="margin:16px 0 0;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-gold btn-sm" type="button" id="topup">Пополнить</button><a class="btn btn-line" href="donate">Цены и статусы</a></p></div>' +
       '<div class="ccard"><h3>Статус ' + tierPill(d) + '</h3><div class="kv"><div><span>Действует</span><b>' + esc(tierUntil(d)) + "</b></div>" +
       (subs || '<div><span>Платные профессии</span><b>нет</b></div>') + "</div></div>" +
       '<div class="ccard wide"><h3>История операций</h3>' + (hist ? '<table class="hist">' + hist + "</table>" : '<div class="empty">Операций пока нет.</div>') + "</div>" +
@@ -189,7 +189,7 @@
       '<div class="sub-line">' + esc(s.xp || 0) + " / " + esc(s.xpNeed || 1200) + " сезонного опыта · сезон идёт до " + date(s.ends) + "</div></div>" +
       '<div class="ccard"><h3>Как качать</h3><ul class="tick"><li>10 опыта за минуту активной игры.</li><li>Весь обычный опыт идёт и в сезон.</li><li>Награды забираются в игре: F4 → «Сезоны».</li></ul></div>' +
       '<div class="ccard gold"><h3>Премиум-ветка</h3><p style="color:#e8dcc6;margin:0 0 14px">Оружие, больше денег и медицины, VIP и PREMIUM на несколько дней.</p>' +
-      (s.premium ? '<span class="badge go">Открыта</span>' : '<a class="btn btn-gold btn-sm" href="donate.html">От $15</a>') + "</div>" +
+      (s.premium ? '<span class="badge go">Открыта</span>' : '<a class="btn btn-gold btn-sm" href="donate">От $15</a>') + "</div>" +
       "</div>";
   };
   V.quests = function (p) {

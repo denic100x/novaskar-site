@@ -4,6 +4,24 @@
 (function () {
   "use strict";
 
+  /* ---------- адреса без .html ----------
+     На сайте: /minicity.html → в строке адреса /minicity (страница та же, без перезагрузки).
+     Локально (файл открыт двойным кликом): ссылки «minicity», «./» → minicity.html, index.html. */
+  var isFile = location.protocol === "file:";
+  if (!isFile && /\.html$/.test(location.pathname)) {
+    try { history.replaceState(null, "", location.pathname.replace(/(^|\/)index\.html$/, "$1").replace(/\.html$/, "") + location.search + location.hash); } catch (e) { }
+  }
+  if (isFile) {
+    document.addEventListener("click", function (e) {
+      var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+      if (!a || e.defaultPrevented) return;
+      var m = /^(\.\/|[a-z0-9_-]+)(#.*)?$/i.exec(a.getAttribute("href"));
+      if (!m) return;
+      e.preventDefault();
+      location.href = (m[1] === "./" ? "index" : m[1]) + ".html" + (m[2] || "");
+    }, true);
+  }
+
   var S = window.SITE || {};
   S.server = S.server || {}; S.links = S.links || {}; S.cabinet = S.cabinet || {};
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -81,7 +99,7 @@
     var s = auth.get(), p = s && s.profile;
     $$("[data-user]").forEach(function (box) {
       if (!s || !p) {
-        box.innerHTML = '<a class="btn btn-cyan" href="cabinet.html">Войти</a>';
+        box.innerHTML = '<a class="btn btn-cyan" href="cabinet">Войти</a>';
         return;
       }
       box.innerHTML =
@@ -90,10 +108,10 @@
         '<div class="user-menu" hidden>' +
         '<div class="um-head"><span class="ava">' + avaHtml(p) + "</span><span><b>" + esc(p.nick) + "</b><small>" +
         (s.demo ? '<span class="demo-flag">ПРИМЕР</span> ' : "") + "Уровень " + esc(p.level || 1) + (p.title ? " · " + esc(p.title) : "") + "</small></span></div>" +
-        '<a href="cabinet.html#overview">Личный кабинет</a>' +
-        '<a href="cabinet.html#donate">Донат-баланс <span class="val">' + usd(p.donate && p.donate.balance) + "</span></a>" +
-        '<a href="cabinet.html#season">Сезон <span class="val" style="color:var(--cyan)">' + esc(p.season ? "ур. " + (p.season.level || 0) : "—") + "</span></a>" +
-        '<a href="cabinet.html#links">Привязки</a>' +
+        '<a href="cabinet#overview">Личный кабинет</a>' +
+        '<a href="cabinet#donate">Донат-баланс <span class="val">' + usd(p.donate && p.donate.balance) + "</span></a>" +
+        '<a href="cabinet#season">Сезон <span class="val" style="color:var(--cyan)">' + esc(p.season ? "ур. " + (p.season.level || 0) : "—") + "</span></a>" +
+        '<a href="cabinet#links">Привязки</a>' +
         '<div class="sep"></div><button type="button" class="out" data-logout>Выйти</button></div>';
       var btn = $(".user-btn", box), menu = $(".user-menu", box);
       btn.addEventListener("click", function (e) {
@@ -117,7 +135,7 @@
     var s = auth.get();
     var done = function () {
       auth.clear();
-      if (/cabinet\.html/.test(location.pathname)) { location.hash = ""; location.reload(); }
+      if (/\/cabinet(\.html)?$/.test(location.pathname)) { location.hash = ""; location.reload(); }
       else toast("Ты вышел из кабинета.");
     };
     if (s && s.token && auth.api()) apiCall("/site/logout", { body: { all: !!all } }).then(done, done);
@@ -366,7 +384,7 @@
   if (st) {
     var sl = $("#struct-launch");
     if (sl) sl.innerHTML = st.launch.map(function (s) {
-      return '<a class="struct-item rv" href="professions.html#' + esc(s.group) + '"><span class="e">' + s.icon + "</span><span><b>" + esc(s.name) + "</b><small>" + esc(s.note) + "</small></span></a>";
+      return '<a class="struct-item rv" href="professions#' + esc(s.group) + '"><span class="e">' + s.icon + "</span><span><b>" + esc(s.name) + "</b><small>" + esc(s.note) + "</small></span></a>";
     }).join("");
   }
   var eco = window.ECONOMY;
@@ -502,7 +520,7 @@
       return '<div class="tier t-' + esc(t.id) + ' rv">' + (t.hot ? '<span class="badge cy hot">Популярный</span>' : "") + "<h3>" + esc(t.name) + "</h3>" +
         '<div class="prices"><div class="pr"><small>30 дней</small><b>$' + esc(t.monthly) + '</b></div><div class="pr"><small>Навсегда</small><b>$' + esc(t.forever) + "</b></div></div>" +
         '<ul class="tick">' + t.perks.map(function (p) { return "<li>" + esc(p) + "</li>"; }).join("") + "</ul>" +
-        '<a class="btn btn-gold" href="cabinet.html#donate">Купить в игре: F4 → Донат</a></div>';
+        '<a class="btn btn-gold" href="cabinet#donate">Купить в игре: F4 → Донат</a></div>';
     }).join("");
     var ditem = function (x, body) {
       return '<div class="ditem rv"><div class="d-top"><h4>' + esc(x.name) + '</h4><span class="p">' + esc(x.price) + "</span></div>" + body + "</div>";

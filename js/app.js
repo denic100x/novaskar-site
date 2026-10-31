@@ -15,15 +15,18 @@
     document.addEventListener("click", function (e) {
       var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
       if (!a || e.defaultPrevented) return;
-      var m = /^(\.\/|[a-z0-9_-]+)(#.*)?$/i.exec(a.getAttribute("href"));
-      if (!m) return;
+      var m = /^((?:\.\.\/)*)(\.\/|[a-z0-9_-]+\/?|[a-z0-9_-]+\/[a-z0-9_-]+\/?)?(\?[^#]*)?(#.*)?$/i.exec(a.getAttribute("href"));
+      if (!m || (!m[1] && !m[2])) return;
+      var pathPart = m[2] || "";
+      if (pathPart === "./" || pathPart === "" || /\/$/.test(pathPart)) pathPart = pathPart.replace(/\.?\/?$/, "") + (pathPart.replace(/\.?\/?$/, "") ? "/" : "") + "index";
       e.preventDefault();
-      location.href = (m[1] === "./" ? "index" : m[1]) + ".html" + (m[2] || "");
+      location.href = m[1] + pathPart + ".html" + (m[3] || "") + (m[4] || "");
     }, true);
   }
 
   var S = window.SITE || {};
   S.server = S.server || {}; S.links = S.links || {}; S.cabinet = S.cabinet || {};
+  var BASE = document.documentElement.getAttribute("data-base") || "";   // "../" для страниц в подпапках (deadzone/)
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var esc = function (s) {
@@ -57,7 +60,7 @@
   /* ---------- сессия кабинета (общая для шапки и кабинета) ---------- */
   var SESSION_KEY = "ns_session";
   var auth = {
-    get: function () { var s = store.get(SESSION_KEY); return s && (s.token || s.demo) ? s : null; },
+    get: function () { var s = store.get(SESSION_KEY); return s && (s.token || s.demo || s.owner) ? s : null; },
     save: function (s) { s.savedAt = Date.now(); store.set(SESSION_KEY, s); renderUser(); },
     clear: function () { store.del(SESSION_KEY); renderUser(); },
     api: function () { return String(S.cabinet.api || "").replace(/\/+$/, ""); },
@@ -99,7 +102,7 @@
     var s = auth.get(), p = s && s.profile;
     $$("[data-user]").forEach(function (box) {
       if (!s || !p) {
-        box.innerHTML = '<a class="btn btn-cyan" href="cabinet">Войти</a>';
+        box.innerHTML = '<a class="btn btn-cyan" href="' + BASE + 'cabinet">Войти</a>';
         return;
       }
       box.innerHTML =
@@ -107,11 +110,11 @@
         '<span class="ava">' + avaHtml(p) + '</span><span class="nm">' + esc(p.nick) + "</span>" + CHEV + "</button>" +
         '<div class="user-menu" hidden>' +
         '<div class="um-head"><span class="ava">' + avaHtml(p) + "</span><span><b>" + esc(p.nick) + "</b><small>" +
-        (s.demo ? '<span class="demo-flag">ПРИМЕР</span> ' : "") + "Уровень " + esc(p.level || 1) + (p.title ? " · " + esc(p.title) : "") + "</small></span></div>" +
-        '<a href="cabinet#overview">Личный кабинет</a>' +
-        '<a href="cabinet#donate">Донат-баланс <span class="val">' + usd(p.donate && p.donate.balance) + "</span></a>" +
-        '<a href="cabinet#season">Сезон <span class="val" style="color:var(--cyan)">' + esc(p.season ? "ур. " + (p.season.level || 0) : "—") + "</span></a>" +
-        '<a href="cabinet#links">Привязки</a>' +
+        (s.demo ? '<span class="demo-flag">ПРИМЕР</span> ' : s.owner ? '<span class="demo-flag">СОЗДАТЕЛЬ</span> ' : "") + "Уровень " + esc(p.level || 1) + (p.title ? " · " + esc(p.title) : "") + "</small></span></div>" +
+        '<a href="' + BASE + 'cabinet#overview">Личный кабинет</a>' +
+        '<a href="' + BASE + 'cabinet#donate">Донат-баланс <span class="val">' + usd(p.donate && p.donate.balance) + "</span></a>" +
+        '<a href="' + BASE + 'cabinet#season">Сезон <span class="val" style="color:var(--cyan)">' + esc(p.season ? "ур. " + (p.season.level || 0) : "—") + "</span></a>" +
+        '<a href="' + BASE + 'cabinet#games">Игры и привязки</a>' +
         '<div class="sep"></div><button type="button" class="out" data-logout>Выйти</button></div>';
       var btn = $(".user-btn", box), menu = $(".user-menu", box);
       btn.addEventListener("click", function (e) {
@@ -212,7 +215,9 @@
   function bindLinks(root) {
     $$("[data-link]", root).forEach(function (a) {
       if (a.__nsBound) return; a.__nsBound = true;
-      var url = S.links[a.getAttribute("data-link")] || "";
+      var key = a.getAttribute("data-link"), url = "";
+      if (key.indexOf(".") > -1) { var cur = S, parts = key.split("."); for (var i = 0; i < parts.length && cur; i++) cur = cur[parts[i]]; url = typeof cur === "string" ? cur : ""; }
+      else url = S.links[key] || "";
       if (url) {
         a.setAttribute("href", url);
         if (/^https?:/i.test(url)) { a.setAttribute("target", "_blank"); a.setAttribute("rel", "noopener"); }
@@ -276,7 +281,9 @@
     };
     var gameById = function (id) { for (var i = 0; i < games.length; i++) if (games[i].id === id) return games[i]; return null; };
     var liveCount = function (g) { return g.modes.filter(function (m) { return m.status === "live"; }).length; };
-    var modesWord = function (n) { var m10 = n % 10, m100 = n % 100; return n + (m10 === 1 && m100 !== 11 ? " режим" : (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) ? " режима" : " режимов"); };
+    var modesWord = function (n, g) { var u = (g && g.unit) || ["режим", "режима", "режимов"]; var m10 = n % 10, m100 = n % 100; return n + " " + (m10 === 1 && m100 !== 11 ? u[0] : (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) ? u[1] : u[2]); };
+    var srvWrap = function (g, m, html) { return g.id === "minecraft" ? '<span class="js-srv" data-server="' + esc(m.id) + '">' + html + "</span>" : html; };
+    var dzRefresh = function () { if (window.NSDZ && window.NSDZ.refresh) window.NSDZ.refresh(); };
 
     var renderStepper = function (g) {
       stepper.innerHTML = (g ? '<button class="st done" type="button" data-back><i>1</i>Игра: ' + esc(g.eng) + "</button>" : '<span class="st on"><i>1</i>Выбери игру</span>') +
@@ -292,10 +299,10 @@
       gate.innerHTML = '<div class="pick-grid">' + games.map(function (g) {
         var live = liveCount(g);
         var st = live ? '<span class="badge gr">' + (live === 1 ? "Работает" : "Работают " + live) + "</span>" :
-          statusBadge(g.modes[0] && g.modes[0].status);
+          srvWrap(g, g.modes[0] || {}, statusBadge(g.modes[0] && g.modes[0].status).replace('class="badge', 'class="badge js-srv-badge'));
         return '<a class="pick ' + accCls(g) + ' rv" href="#' + esc(g.id) + '" data-game="' + esc(g.id) + '">' + art(g) +
           '<span class="eyebrow">' + esc(g.eng) + "</span><h2>" + esc(g.name) + "</h2><p>" + esc(g.tagline) + "</p>" +
-          '<span class="p-foot"><span>' + st + ' <span class="p-modes">' + modesWord(g.modes.length) + '</span></span><span class="p-go">Выбрать ' + ARROW + "</span></span></a>";
+          '<span class="p-foot"><span>' + st + ' <span class="p-modes">' + modesWord(g.modes.length, g) + '</span></span><span class="p-go">Выбрать ' + ARROW + "</span></span></a>";
       }).join("") + "</div>";
       var last = store.get("ns_last_mode");
       if (last && last.url) {
@@ -303,6 +310,7 @@
         cont.innerHTML = "Ты был здесь в прошлый раз: <a class=\"btn btn-line\" href=\"" + esc(last.url) + "\">" + esc(last.game) + " · " + esc(last.name) + " " + ARROW + "</a>";
       } else cont.hidden = true;
       reveal(gate);
+      dzRefresh();
     };
 
     var renderModes = function (g) {
@@ -312,20 +320,26 @@
       cont.hidden = true;
       var cards = g.modes.map(function (m) {
         var live = m.status === "live" && m.url;
-        var tag = live ? "a" : "div";
-        var href = live ? ' href="' + esc(m.url) + '" data-mode="' + esc(m.id) + '"' : "";
+        var linked = !!m.url;
+        var tag = linked ? "a" : "div";
+        var href = linked ? ' href="' + esc(m.url) + '" data-mode="' + esc(m.id) + '"' : "";
         var foot = live
           ? '<span class="online" data-online="' + esc(m.id) + '">' + (m.id === "minicity" && addr ? '<span class="dot"></span>' + esc(addr) : "Режим открыт") + '</span><span class="btn btn-primary btn-sm">Открыть ' + ARROW + "</span>"
-          : '<span class="online">' + (m.status === "dev" ? "Следи за новостями" : "Запуск позже") + "</span>";
-        return "<" + tag + ' class="mode-card' + (live ? "" : " is-off") + '"' + href + ">" +
+          : linked
+            ? srvWrap(g, m, '<span class="online js-srv-online" hidden></span>') + '<span class="btn btn-line btn-sm">' + (m.status === "soon" || m.status === "online" ? "Играть " : "Подробнее ") + ARROW + "</span>"
+            : '<span class="online">' + (m.status === "dev" ? "Следи за новостями" : "Запуск позже") + "</span>";
+        return "<" + tag + ' class="mode-card' + (live || linked ? "" : " is-off") + (linked && !live ? " is-link" : "") + '"' + href + ">" +
           (m.glyph ? '<span class="glyph" aria-hidden="true">' + esc(m.glyph) + "</span>" : "") +
-          '<div class="m-top">' + statusBadge(m.status) + "</div><h3>" + esc(m.name) + '</h3><div class="m-sub">' + esc(m.sub || "") + "</div>" +
+          '<div class="m-top">' + srvWrap(g, m, statusBadge(m.status).replace('class="badge', 'class="badge js-srv-badge')) + "</div><h3>" + esc(m.name) + '</h3><div class="m-sub">' + esc(m.sub || "") + "</div>" +
           (m.text ? "<p>" + esc(m.text) + "</p>" : "") + '<div class="m-go">' + foot + "</div></" + tag + ">";
       }).join("");
       var extra = "";
-      if (g.id === "minecraft") extra = '<div class="gp-actions" style="padding:0 clamp(18px,3vw,40px) 28px;margin:0"><a class="btn btn-amber" href="#" data-link="launcher" data-soon="Лаунчер LAST CITY появится ближе к запуску.">Скачать лаунчер</a></div>';
+      if (g.launcher || g.url) extra = '<div class="gp-actions" style="padding:0 clamp(18px,3vw,40px) 28px;margin:0">' +
+        (g.launcher ? '<a class="btn btn-amber btn-big" href="' + esc(g.launcher) + '">Скачать лаунчер</a>' : "") +
+        (g.url ? '<a class="btn btn-line" href="' + esc(g.url) + '">Главная ' + esc(g.name) + " " + ARROW + "</a>" : "") + "</div>";
       gate.innerHTML = '<div class="crumbs"><button type="button" data-back>Все игры</button><span>›</span><span>' + esc(g.eng) + "</span></div>" +
-        '<section class="mode-stage ' + accCls(g) + '"><div class="gp-banner">' + art(g) + '<div class="eyebrow">' + esc(g.eng) + " · Nova Scar</div><h2>" + esc(g.name) + '</h2><p class="tagline">' + esc(g.tagline) + "</p></div>" +
+        '<section class="mode-stage ' + accCls(g) + '"><div class="gp-banner' + (document.getElementById("logo-" + g.id) ? " dz-banner" : "") + '">' + art(g) + '<div class="eyebrow">' + esc(g.eng) + " · Nova Scar</div>" +
+        (document.getElementById("logo-" + g.id) ? document.getElementById("logo-" + g.id).innerHTML + '<h2 class="sr-only">' + esc(g.name) + "</h2>" : "<h2>" + esc(g.name) + '</h2><p class="tagline">' + esc(g.tagline) + "</p>") + "</div>" +
         '<div class="mode-grid">' + cards + "</div>" + extra + "</section>";
       $("[data-back]", gate).addEventListener("click", function () { go(""); });
       $$("[data-mode]", gate).forEach(function (a) {
@@ -336,6 +350,7 @@
       });
       bindLinks(gate);
       updateOnline(lastStatus);
+      dzRefresh();
     };
 
     var lastStatus = null;

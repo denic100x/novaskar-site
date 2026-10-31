@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="ru" class="dz" data-base="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NS-Deadzone — зомби-выживание на Minecraft · Nova Scar</title>
+<meta name="description" content="NS-Deadzone — Zombie Survival на Minecraft 1.21.1. Зомби ломают стены, каждые 7 дней — нашествие. Проект Nova Scar.">
+<meta name="theme-color" content="#050b16">
+<meta property="og:type" content="website">
+<meta property="og:title" content="NS-Deadzone — зомби-выживание на Minecraft · Nova Scar">
+<meta property="og:description" content="NS-Deadzone — Zombie Survival на Minecraft 1.21.1. Зомби ломают стены, каждые 7 дней — нашествие. Проект Nova Scar.">
+<meta property="og:image" content="https://novaskar.com/deadzone/assets/banner.jpg">
+<meta property="og:locale" content="ru_RU">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body class="dz">
+<header class="site-header">
+<div class="container header-inner">
+<a class="brand" href="./" aria-label="NS-Deadzone — на главную раздела"><svg class="logo-mark" viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<defs>
+<linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cf0ff"/><stop offset="1" stop-color="#0a7cff"/></linearGradient>
+<linearGradient id="lg2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#0a7cff" stop-opacity=".0"/><stop offset="1" stop-color="#7cf0ff" stop-opacity=".9"/></linearGradient>
+</defs>
+<path d="M10 66V12h13l22 34V12h12v54H44L22 32v34z" fill="none" stroke="url(#lg2)" stroke-width="2" transform="translate(-4 -6)" opacity=".75"/>
+<path d="M8 64V8h13l22 34V8h13v56H43L21 30v34z" fill="url(#lg1)"/>
+<path d="M50 2l1.6 4.4L56 8l-4.4 1.6L50 14l-1.6-4.4L44 8l4.4-1.6z" fill="#bff6ff"/>
+</svg><span class="brand-text"><b>NOVA SCAR</b><small>NS-Deadzone · Minecraft</small></span></a>
+<span class="header-sep"></span>
+<nav class="nav" id="nav" aria-label="Основное меню"><a href="./">Главная</a><a href="about">О сервере</a><a href="systems">Возможности</a><a href="launcher">Лаунчер</a><a href="rules">Правила</a><a href="donate">Донат</a><a href="news">Новости</a><a href="map" class="nav-x">Карта</a><a href="wiki" class="nav-x">Вики</a><a class="nav-x nav-ext" href="#" data-link="deadzone.discord.invite" data-soon="Discord NS-Deadzone откроется вместе с сервером."><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 5.6A17 17 0 0 0 15.4 4l-.5 1a15.7 15.7 0 0 0-5.8 0l-.5-1a17 17 0 0 0-4.2 1.6C1.7 9.6 1 13.5 1.4 17.3A17 17 0 0 0 6.6 20l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.2 0l.4.3-1.7.8 1.1 1.8a17 17 0 0 0 5.2-2.7c.5-4.4-.8-8.3-3-11.7zM8.7 15c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2S9.7 15 8.7 15zm6.6 0c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2-.8 2.2-1.9 2.2z"/></svg>Discord</a><a class="nav-extra" href="../#minecraft">Сменить игру или режим</a></nav>
+<div class="header-right">
+<a class="mode-chip" href="../#minecraft" title="Сменить игру или режим"><span><small>Minecraft</small><b>NS-Deadzone</b></span><span class="sw"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13l-3-3"/><path d="M20 16H7l3 3"/></svg></span></a>
+<div class="user-wrap" data-user><a class="btn btn-cyan" href="../cabinet"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg> Войти</a></div>
+<button class="burger" type="button" aria-label="Меню" aria-expanded="false" aria-controls="nav"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div>
+</div>
+</header>
+<main>
+<section class="dz-hero">
+<img class="hero-bg" src="assets/hero.jpg" alt="" width="2000" height="1000" fetchpriority="high" decoding="async">
+<div class="hand hand-1">Пока светло — беги.<br>Пока темно — держись.</div>
+<div class="container hero-inner">
+<div class="hero-copy">
+<div class="eyebrow">Minecraft · Zombie Survival · Nova Scar</div>
+<svg class="dz-logo dz-logo-hero" viewBox="0 0 900 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="NS-DEADZONE">
+<defs>
+<linearGradient id="dzRust" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd9ad"/><stop offset=".28" stop-color="#ffa041"/><stop offset=".6" stop-color="#c8491a"/><stop offset="1" stop-color="#5a1c0a"/></linearGradient>
+<filter id="dzRough" x="-6%" y="-20%" width="112%" height="150%"><feTurbulence type="fractalNoise" baseFrequency=".014 .06" numOctaves="3" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/></filter>
+<filter id="dzGrime" x="-6%" y="-20%" width="112%" height="150%"><feTurbulence type="fractalNoise" baseFrequency=".75" numOctaves="2" seed="9" result="g"/><feColorMatrix in="g" type="matrix" values="0 0 0 0 .25  0 0 0 0 .09  0 0 0 0 .03  0 0 0 .6 0" result="gm"/><feComposite in="gm" in2="SourceAlpha" operator="in" result="grime"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="grime"/></feMerge></filter>
+</defs>
+<g filter="url(#dzRough)">
+<text x="454" y="134" text-anchor="middle" font-size="124" textLength="860" lengthAdjust="spacingAndGlyphs" fill="#2a0d05" opacity=".9">NS-DEADZONE</text>
+<text x="450" y="129" text-anchor="middle" font-size="124" textLength="860" lengthAdjust="spacingAndGlyphs" fill="url(#dzRust)" filter="url(#dzGrime)">NS-DEADZONE</text>
+<path d="M96 126q5 28 2 58q-7-26-10-58z M262 126q4 22 1 44q-6-20-7-44z M418 126q6 30 3 66q-8-30-11-66z M548 126q3 18 1 36q-5-16-6-36z M708 126q5 26 2 54q-7-24-9-54z M838 126q4 22 2 48q-6-22-8-48z" fill="#7a2a0c"/>
+</g>
+</svg>
+<h1><span class="l1">Выживи в</span><span class="l2">мёртвой зоне</span></h1>
+<p class="lead">Зомби ломают стены. Каждые 7 дней — нашествие.</p>
+<div class="hero-cta">
+<a class="btn btn-primary" href="launcher"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg> Скачать лаунчер</a>
+<a class="btn btn-ghost" href="../cabinet"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg> Личный кабинет</a>
+</div>
+</div>
+</div>
+</section>
+
+<div class="container">
+<div class="dz-stats">
+<div class="stat stat-moon rv"><b><span class="js-moon-days">7</span><span class="u">дней</span></b><small>между нашествиями</small></div>
+<div class="stat rv"><b>Сезон <span class="js-season-num">1</span></b><small><span class="js-season-ends">до 31.12</span></small></div>
+<div class="stat rv"><b><span class="js-srv-count">3</span><span class="u">сервера</span></b><small>ALPHA · DELTA · OMEGA</small></div>
+<div class="stat stat-live rv"><b class="js-online-total">—</b><small>Онлайн сейчас · <span class="js-online-note">серверы ещё не открыты</span></small></div>
+</div>
+
+<div class="moon rv" id="moon" aria-live="polite">
+<span class="m-ic" aria-hidden="true">☠️</span>
+<div>
+<div class="m-label">До нашествия</div>
+<div class="m-time js-moon-time">— д — ч — мин</div>
+<div class="m-note js-moon-note">Отсчёт начнётся вместе с открытием сервера ALPHA</div>
+</div>
+<div class="m-right">Каждые 7 дней на закате. Все зомби в округе знают, где ты, — и идут до рассвета.</div>
+<div class="m-bar"><i class="js-moon-bar"></i></div>
+</div>
+</div>
+
+<section class="srv-sec" id="servers">
+<div class="container">
+<div class="srv-head">
+<div><h2 class="sec-title rv" style="text-align:left">Выбери сервер</h2><p class="sec-sub rv" style="margin:8px 0 0;text-align:left">Три одинаковых сервера — один мир и правила. На старте открывается ALPHA, DELTA и OMEGA — позже.</p></div>
+<a class="btn btn-line rv" href="../">Все игры Nova Scar <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+</div>
+<div class="srv-grid">
+<article class="srv js-srv rv" data-server="alpha" data-srv="soon">
+<span class="glyph" aria-hidden="true">α</span>
+<h3>NS-DEADZONE • ALPHA</h3>
+<span class="s-note">Сервер 1</span>
+<div class="s-row"><span class="badge js-srv-badge am">На старте</span><span class="js-srv-online" hidden></span></div>
+<span class="srv-addr js-srv-addr" hidden><span class="addr"></span><button type="button" data-copy-addr aria-label="Скопировать адрес"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button></span>
+<div class="s-row s-actions"><a class="btn btn-line btn-sm s-play" href="launcher">Играть <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a><a class="s-discord js-srv-discord" href="#" hidden><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 5.6A17 17 0 0 0 15.4 4l-.5 1a15.7 15.7 0 0 0-5.8 0l-.5-1a17 17 0 0 0-4.2 1.6C1.7 9.6 1 13.5 1.4 17.3A17 17 0 0 0 6.6 20l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.2 0l.4.3-1.7.8 1.1 1.8a17 17 0 0 0 5.2-2.7c.5-4.4-.8-8.3-3-11.7zM8.7 15c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2S9.7 15 8.7 15zm6.6 0c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2-.8 2.2-1.9 2.2z"/></svg> Discord сервера</a></div>
+</article>
+<article class="srv js-srv rv" data-server="delta" data-srv="soon">
+<span class="glyph" aria-hidden="true">Δ</span>
+<h3>NS-DEADZONE • DELTA</h3>
+<span class="s-note">Сервер 2</span>
+<div class="s-row"><span class="badge js-srv-badge am">На старте</span><span class="js-srv-online" hidden></span></div>
+<span class="srv-addr js-srv-addr" hidden><span class="addr"></span><button type="button" data-copy-addr aria-label="Скопировать адрес"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button></span>
+<div class="s-row s-actions"><a class="btn btn-line btn-sm s-play" href="launcher">Играть <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a><a class="s-discord js-srv-discord" href="#" hidden><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 5.6A17 17 0 0 0 15.4 4l-.5 1a15.7 15.7 0 0 0-5.8 0l-.5-1a17 17 0 0 0-4.2 1.6C1.7 9.6 1 13.5 1.4 17.3A17 17 0 0 0 6.6 20l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.2 0l.4.3-1.7.8 1.1 1.8a17 17 0 0 0 5.2-2.7c.5-4.4-.8-8.3-3-11.7zM8.7 15c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2S9.7 15 8.7 15zm6.6 0c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2-.8 2.2-1.9 2.2z"/></svg> Discord сервера</a></div>
+</article>
+<article class="srv js-srv rv" data-server="omega" data-srv="soon">
+<span class="glyph" aria-hidden="true">Ω</span>
+<h3>NS-DEADZONE • OMEGA</h3>
+<span class="s-note">Сервер 3</span>
+<div class="s-row"><span class="badge js-srv-badge am">На старте</span><span class="js-srv-online" hidden></span></div>
+<span class="srv-addr js-srv-addr" hidden><span class="addr"></span><button type="button" data-copy-addr aria-label="Скопировать адрес"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button></span>
+<div class="s-row s-actions"><a class="btn btn-line btn-sm s-play" href="launcher">Играть <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a><a class="s-discord js-srv-discord" href="#" hidden><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 5.6A17 17 0 0 0 15.4 4l-.5 1a15.7 15.7 0 0 0-5.8 0l-.5-1a17 17 0 0 0-4.2 1.6C1.7 9.6 1 13.5 1.4 17.3A17 17 0 0 0 6.6 20l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.2 0l.4.3-1.7.8 1.1 1.8a17 17 0 0 0 5.2-2.7c.5-4.4-.8-8.3-3-11.7zM8.7 15c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2S9.7 15 8.7 15zm6.6 0c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2-.8 2.2-1.9 2.2z"/></svg> Discord сервера</a></div>
+</article>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="container">
+<div class="cards">
+<article class="card card-orange rv">
+<img class="card-art" src="assets/card-systems.jpg" alt="" width="560" height="640" loading="lazy" decoding="async">
+<div class="card-body">
+<span class="c-ic"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.2 2.2 3-.6.6 3L20 8.8 18.9 12l1.1 3.2-2.2 2.2-.6 3-3-.6L12 22l-2.2-2.2-3 .6-.6-3L4 15.2 5.1 12 4 8.8l2.2-2.2.6-3 3 .6z"/><circle cx="12" cy="12" r="3.2" fill="#06111f"/></svg></span>
+<h3>Возможности</h3>
+<p>Выживание, зомби, нашествие, оружие, транспорт, электричество, кланы и сезоны — всё, что есть в мире.</p>
+<a class="btn btn-line" href="systems">Смотреть механики <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+</div>
+</article>
+<article class="card card-grey rv">
+<img class="card-art" src="assets/card-rules.jpg" alt="" width="560" height="640" loading="lazy" decoding="async">
+<div class="card-body">
+<span class="c-ic"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M14 2v6h6" fill="none" stroke="#06111f" stroke-width="1.6"/><path d="M8 13h8M8 16.5h8M8 9.5h3" stroke="#06111f" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+<h3>Правила</h3>
+<p>Что можно и нельзя: PvP и рейды, чат, читы, кланы, донат. У каждого пункта — наказание.</p>
+<a class="btn btn-line" href="rules">Читать правила <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+</div>
+</article>
+<article class="card card-gold rv">
+<img class="card-art" src="assets/card-donate.jpg" alt="" width="560" height="640" loading="lazy" decoding="async">
+<div class="card-body">
+<span class="c-ic"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/><circle cx="3" cy="7.5" r="1.6"/><circle cx="12" cy="4.2" r="1.6"/><circle cx="21" cy="7.5" r="1.6"/></svg></span>
+<h3>Донат</h3>
+<p>Донат-доллары, как в Mini City RP, и статусы VIP / PREMIUM / LEGEND. Без топ-лута за деньги.</p>
+<a class="btn btn-gold" href="donate">Открыть магазин <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+</div>
+</article>
+</div>
+</div>
+</section>
+
+<section class="section" id="world">
+<div class="container">
+<h2 class="sec-title rv" style="text-align:left">Что есть в <em>мире</em></h2>
+<p class="sec-sub rv" style="text-align:left">Нажми на плитку — откроется подробное описание механики.</p>
+<div class="tiles" id="tiles"></div>
+</div>
+</section>
+
+<section class="section" id="locations">
+<div class="container">
+<h2 class="sec-title rv" style="text-align:left">Локации</h2>
+<p class="sec-sub rv" style="text-align:left">Чем дальше от безопасной зоны — тем лучше лут и тем выше опасность.</p>
+<div class="locs-wrap">
+<div class="locs-nav"><button type="button" data-scroll="-1" aria-label="Назад">‹</button><button type="button" data-scroll="1" aria-label="Вперёд">›</button></div>
+<div class="locs" id="locs"></div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="container">
+<div class="plate rv">
+<div class="p-text"><span class="p-ic" aria-hidden="true">🪪</span><div><h3>Личный кабинет</h3><p>Один аккаунт Nova Scar для всех игр: донат-баланс, статусы, сезон и привязки — в одном месте. Аккаунт NS-Deadzone добавляется в кабинете после открытия сервера.</p></div></div>
+<a class="btn btn-primary" href="../cabinet"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg> Открыть кабинет</a>
+</div>
+</div>
+</section>
+
+<div class="container"><div class="quote rv"><span class="hand">Ночь будет длинной. Держитесь вместе.</span></div></div>
+
+<section class="section" id="news">
+<div class="container">
+<div class="others-head">
+<div><h2 class="sec-title rv" style="text-align:left">Последние новости</h2><p class="sec-sub rv" style="margin:8px 0 0;text-align:left">Обновления, события и сезоны NS-Deadzone.</p></div>
+<a class="btn btn-line rv" href="news">Все новости <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+</div>
+<div class="ncards" id="dz-news-home"></div>
+</div>
+</section>
+
+<section class="steps-sec" id="how">
+<div class="container">
+<h2 class="sec-title rv">Как начать играть?</h2>
+<p class="sec-sub rv">Три шага — и ты в мёртвой зоне.</p>
+<div class="steps">
+<div class="step rv">
+<span class="step-num">1</span>
+<div><h3>Скачай лаунчер</h3><p>Лаунчер NS-Deadzone сам поставит сборку модов и Java.</p><p style="margin-top:8px"><a href="launcher">Страница лаунчера</a></p></div>
+<span class="s-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg></span>
+</div>
+<div class="step rv">
+<span class="step-num">2</span>
+<div><h3>Войди через Microsoft</h3><p>Нужен купленный Minecraft Java Edition — вход аккаунтом Microsoft.</p></div>
+<span class="s-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg></span>
+</div>
+<div class="step rv">
+<span class="step-num">3</span>
+<div><h3>Выбери сервер и пройди обучение</h3><p>Первые квесты в безопасной зоне научат выживать до первого нашествия.</p></div>
+<span class="s-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12a4 4 0 0 1 4 4v3a3 3 0 0 1-5.4 1.8L15 15H9l-1.6 1.8A3 3 0 0 1 2 15v-3a4 4 0 0 1 4-4z"/><path d="M8 11v3M6.5 12.5h3"/><circle cx="16" cy="11.5" r=".8" fill="currentColor"/><circle cx="18" cy="13.5" r=".8" fill="currentColor"/></svg></span>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section" id="discord">
+<div class="container">
+<div class="plate plate-discord rv">
+<div class="p-text"><span class="p-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 5.6A17 17 0 0 0 15.4 4l-.5 1a15.7 15.7 0 0 0-5.8 0l-.5-1a17 17 0 0 0-4.2 1.6C1.7 9.6 1 13.5 1.4 17.3A17 17 0 0 0 6.6 20l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.2 0l.4.3-1.7.8 1.1 1.8a17 17 0 0 0 5.2-2.7c.5-4.4-.8-8.3-3-11.7zM8.7 15c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2S9.7 15 8.7 15zm6.6 0c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2-.8 2.2-1.9 2.2z"/></svg></span><div><h3>Discord NS-Deadzone</h3><p>Новости, поиск напарников, поддержка и голосовые каналы кланов. <span class="js-discord-online"></span></p></div></div>
+<a class="btn btn-discord" href="#" data-link="deadzone.discord.invite" data-soon="Discord NS-Deadzone откроется вместе с сервером."><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 5.6A17 17 0 0 0 15.4 4l-.5 1a15.7 15.7 0 0 0-5.8 0l-.5-1a17 17 0 0 0-4.2 1.6C1.7 9.6 1 13.5 1.4 17.3A17 17 0 0 0 6.6 20l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.2 0l.4.3-1.7.8 1.1 1.8a17 17 0 0 0 5.2-2.7c.5-4.4-.8-8.3-3-11.7zM8.7 15c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2S9.7 15 8.7 15zm6.6 0c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2-.8 2.2-1.9 2.2z"/></svg> Вступить</a>
+</div>
+<div class="dw rv" id="discord-widget"></div>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="container footer-inner">
+<div class="footer-brand"><svg class="logo-mark" viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<defs>
+<linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cf0ff"/><stop offset="1" stop-color="#0a7cff"/></linearGradient>
+<linearGradient id="lg2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#0a7cff" stop-opacity=".0"/><stop offset="1" stop-color="#7cf0ff" stop-opacity=".9"/></linearGradient>
+</defs>
+<path d="M10 66V12h13l22 34V12h12v54H44L22 32v34z" fill="none" stroke="url(#lg2)" stroke-width="2" transform="translate(-4 -6)" opacity=".75"/>
+<path d="M8 64V8h13l22 34V8h13v56H43L21 30v34z" fill="url(#lg1)"/>
+<path d="M50 2l1.6 4.4L56 8l-4.4 1.6L50 14l-1.6-4.4L44 8l4.4-1.6z" fill="#bff6ff"/>
+</svg><div><b>NOVA SCAR</b><small>NS-Deadzone · Minecraft</small></div></div>
+<nav class="footer-links" aria-label="Ссылки внизу">
+<a href="./">NS-Deadzone</a><a href="about">О сервере</a><a href="systems">Возможности</a><a href="launcher">Лаунчер</a><a href="rules">Правила</a><a href="donate">Донат</a><a href="news">Новости</a><a href="map">Карта</a><a href="wiki">Вики</a><a href="#" data-link="deadzone.discord.invite" data-soon="Discord NS-Deadzone откроется вместе с сервером.">Discord</a><a href="../">Все игры</a><a href="../minicity">Mini City RP</a><a href="../cabinet">Личный кабинет</a>
+</nav>
+<div class="footer-copy">© <span id="year">2026</span> Nova Scar · NS-Deadzone</div>
+</div>
+</footer>
+<script src="../js/config.js"></script>
+<script src="../js/app.js"></script>
+<script src="js/dz-data.js"></script>
+<script src="js/deadzone.js"></script>
+</body>
+</html>
